@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Customers, Order
-from .sms import send_sms
+#from .sms import send_sms
 
 
 class CustomersSerializer(serializers.ModelSerializer):
@@ -18,5 +18,6 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         order = Order.objects.create(**validated_data)
         customer = order.customer
+        from .sms import send_sms
         send_sms(customer.phone_number, f"New order: {order.item} for {order.amount}")
         return order

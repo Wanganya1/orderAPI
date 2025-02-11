@@ -14,3 +14,7 @@ path('orders/search/', views.OrderSearchView.as_view(), name='order-search'),
 
 ]
 
+#urlpatterns += [
+    #path('create_order/', create_order, name='create_order'),
+#]
+path('orders/search/', views.OrderSearchView.as_view(), name='order-search'),
