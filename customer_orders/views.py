@@ -5,9 +5,12 @@ from .models import Customers,Order
 from .serializers import CustomersSerializer,OrderSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from datetime import datetime
+from datetime import datetime ,timedelta
 from rest_framework import filters
+#from django.views.decorators.csrf import csrf_exempt
+#from django.utils.decorators import method_decorator
 
+#@method_decorator(csrf_exempt, name='dispatch')
 class CustomersViewSet(viewsets.ModelViewSet):
     queryset = Customers.objects.all()
     serializer_class = CustomersSerializer
@@ -30,6 +33,14 @@ class OrderSearchView(APIView):
         end_date_str = request.query_params.get('end_date')
 
         try:
+
+            today = datetime.today().date()
+            default_start_date = today - timedelta(days = 30)
+
+
+
+
+
             # Validate and parse date strings
             if start_date_str:
                 start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
@@ -49,7 +60,9 @@ class OrderSearchView(APIView):
                 )
 
             # Filter orders by date range
-            orders = Order.objects.filter(time__range=(start_date, end_date))
+            #orders = Order.objects.filter(time__range=(start_date, end_date))
+            orders = Order.objects.filter(timestamp__range=(start_date, end_date))
+
 
             # Serialize the filtered orders
             serializer = OrderSerializer(orders, many=True)
@@ -69,6 +82,17 @@ class OrderSearchView(APIView):
                 {"error": f"An error occurred: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+#def orders_page(request):
+    #return render(request, 'index.html')
+
+
+
+
+
+
+
 
 #class OrderSearchView(APIView):
  #   def get(self, request):

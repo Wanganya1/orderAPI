@@ -1,20 +1,23 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import CustomersViewSet,OrderViewSet
-from . import views
+from .views import CustomersViewSet, OrderViewSet, OrderSearchView
+from django.contrib import admin 
 
+# Initialize router
 router = DefaultRouter()
-router.register('Customers', CustomersViewSet)
-router.register('Order', OrderViewSet)
+router.register(r'customers', CustomersViewSet)
+router.register(r'orders', OrderViewSet)
 
-urlpatterns =[
-
-path('',include(router.urls)),
-path('orders/search/', views.OrderSearchView.as_view(), name='order-search'),
-
+# Define URL patterns
+urlpatterns = [
+   # path('admin/', admin.site.urls),  # Admin panel
+    path('api/', include(router.urls)),  # API routes
+    path('api/orders/search/', OrderSearchView.as_view(), name='order-search'),  # Order search by date
 ]
 
-#urlpatterns += [
-    #path('create_order/', create_order, name='create_order'),
-#]
-path('orders/search/', views.OrderSearchView.as_view(), name='order-search'),
+
+
+
+
+
+
